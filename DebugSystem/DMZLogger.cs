@@ -6,7 +6,7 @@ using UnityEngine;
 namespace DMZ.DebugSystem
 {
 	//TODO: add logging to WEB
-	public static class RRLogger
+	public static class DMZLogger
 	{
 		public class LoggerOptions
 		{
@@ -35,7 +35,7 @@ namespace DMZ.DebugSystem
 
 #if UNITY_EDITOR
 
-		static RRLogger()
+		static DMZLogger()
 		{
 			if (UnityEditor.EditorGUIUtility.isProSkin) 
 				return;
@@ -124,14 +124,12 @@ namespace DMZ.DebugSystem
 			[CallerLineNumber] int sourceLineNumber = 0)
 		{
 			var logMessage = PrepareLogMessage(exception.Message, sourceFilePath, memberName, sourceLineNumber);
-
-			using (var stream = new StreamWriter(_logFolderPath, true))
-			{
-				stream.WriteLine(TimeWrapMessage(logMessage));
-				stream.WriteLine("RR.Trace:");
-				stream.WriteLine(exception.StackTrace);
-				stream.WriteLine("RR.EndOfTrace -------------------------------");
-			}
+			
+			using var stream = new StreamWriter(_logFolderPath, true);
+			stream.WriteLine(TimeWrapMessage(logMessage));
+			stream.WriteLine("RR.Trace:");
+			stream.WriteLine(exception.StackTrace);
+			stream.WriteLine("RR.EndOfTrace -------------------------------");
 		}
 
 		private static void ToFileIfDefault(string message)

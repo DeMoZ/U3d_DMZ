@@ -163,7 +163,7 @@ namespace DMZ.Extensions
 					var genericArgs = toField.FieldType.GetGenericArguments();
 					if (genericArgs.Length > 1)
 					{
-						RRLogger.Log("Multiple generic types in IList are not supported for deepcopy atm.");
+						DMZLogger.Log("Multiple generic types in IList are not supported for deepcopy atm.");
 						continue;
 					}
 
@@ -208,7 +208,7 @@ namespace DMZ.Extensions
 
 					if (toField.FieldType.GetConstructor(Type.EmptyTypes) == null)
 					{
-						RRLogger.Log("Parameterized constructors unsupported, skipping field.");
+						DMZLogger.Log("Parameterized constructors unsupported, skipping field.");
 						continue;
 					}
 
