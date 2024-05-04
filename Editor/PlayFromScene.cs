@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace UnityEditorTools
+namespace DMZ.Editor
 {
 	public class PlayFromScene : EditorWindow
 	{
