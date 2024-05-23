@@ -9,6 +9,11 @@ namespace DMZ.Events
         protected readonly object _lock = new();
         protected T _data;
 
+        public DMZState(T state = default)
+        {
+            _data = state;
+        }
+        
         public void Subscribe(Action<T> callback)
         {
             lock (_lock)
