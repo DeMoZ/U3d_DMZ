@@ -47,6 +47,16 @@ namespace DMZ.Events
             }
         }
 
+        public void SetValueAndForceNotify(T value)
+        {
+            lock (_lock)
+            {
+                _data = value;
+            }
+
+            NotifySubscribers();
+        }
+
         protected virtual void NotifySubscribers()
         {
             List<Action<T>> subscribersCopy;
