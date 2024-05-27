@@ -8,9 +8,11 @@ namespace DMZ.Events
         private readonly List<Action<T>> _subscribers = new();
         protected readonly object _lock = new();
         protected T _data;
+        protected T _previousData;
 
         public DMZState(T state = default)
         {
+            _previousData = state;
             _data = state;
         }
         
@@ -30,6 +32,8 @@ namespace DMZ.Events
             }
         }
 
+        public T PreviousValue => _previousData;
+        
         public T Value
         {
             get => _data;
@@ -40,6 +44,7 @@ namespace DMZ.Events
                     if (Equals(value, _data))
                         return;
 
+                    _previousData = _data;
                     _data = value;
                 }
 
@@ -47,16 +52,51 @@ namespace DMZ.Events
             }
         }
 
-        public void SetValueAndForceNotify(T value)
+        /// <summary>
+        /// set value and force notify even if state has not changed
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetAndForceNotify(T value)
         {
             lock (_lock)
             {
+                _previousData = _data;
                 _data = value;
             }
 
             NotifySubscribers();
         }
 
+        /// <summary>
+        /// set value to both data and previous data
+        /// </summary>
+        /// <param name="value"></param>
+        public void ResetValue(T value)
+        {
+            lock (_lock)
+            {
+                _previousData = value;
+                _data = value;
+            }
+
+            NotifySubscribers();
+        }
+        
+        /// <summary>
+        /// set value to both data and previous data and force notify even if state has not changed
+        /// </summary>
+        /// <param name="value"></param>
+        public void ResetAndForceNotify(T value)
+        {
+            lock (_lock)
+            {
+                _previousData = value;
+                _data = value;
+            }
+
+            NotifySubscribers();
+        }
+        
         protected virtual void NotifySubscribers()
         {
             List<Action<T>> subscribersCopy;
