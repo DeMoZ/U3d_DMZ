@@ -33,7 +33,7 @@ namespace DMZ.Extensions
 		{
 			if (String.IsNullOrEmpty(hex))
 			{
-				DMZLogger.Error("Hex string is null");
+				DMZLogger.LogError("Hex string is null");
 				return Color.white;
 			}
 
@@ -41,7 +41,7 @@ namespace DMZ.Extensions
 
 			if (hex.Length < 6 || hex.Length > 8)
 			{
-				DMZLogger.Error("Hex string has wrong format. Must be #FF00AA");
+				DMZLogger.LogError("Hex string has wrong format. Must be #FF00AA");
 				return Color.white;
 			}
 
@@ -61,7 +61,7 @@ namespace DMZ.Extensions
 			}
 			catch (Exception e)
 			{
-				DMZLogger.Error(e, $"Error parsing color. Used default {"Red".Red().Bold()} color.");
+				DMZLogger.LogError(e, $"Error parsing color. Used default {"Red".Red().Bold()} color.");
 			}
 
 			return Color.red;

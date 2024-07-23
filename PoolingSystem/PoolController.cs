@@ -36,7 +36,7 @@ namespace DMZ.PoolingSystem
         {
             if (instance is null)
             {
-                Debug.Warning($"{nameof(PoolController)} is not found on Scene. It will be created automatically.");
+                Debug.LogWarning($"{nameof(PoolController)} is not found on Scene. It will be created automatically.");
                 var go = new GameObject() { name = nameof(PoolController) };
                 instance = go.AddComponent<PoolController>();
             }

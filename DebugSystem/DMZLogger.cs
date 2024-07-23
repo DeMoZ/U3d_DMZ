@@ -66,7 +66,7 @@ namespace DMZ.DebugSystem
 			Debug.Log(logMessage);
 		}
 
-		public static void Error(string message = "",
+		public static void LogError(string message = "",
 			[CallerMemberName] string memberName = "",
 			[CallerFilePath] string sourceFilePath = "",
 			[CallerLineNumber] int sourceLineNumber = 0)
@@ -77,7 +77,7 @@ namespace DMZ.DebugSystem
 			OnError?.Invoke(logMessage);
 		}
 
-		public static void Error(Exception exception,
+		public static void LogError(Exception exception,
 			string customMessage = "",
 			[CallerMemberName] string memberName = "",
 			[CallerFilePath] string sourceFilePath = "",
@@ -94,7 +94,7 @@ namespace DMZ.DebugSystem
 			OnError?.Invoke(logMessage);
 		}
 
-		public static void Warning(string message,
+		public static void LogWarning(string message,
 			[CallerMemberName] string memberName = "",
 			[CallerFilePath] string sourceFilePath = "",
 			[CallerLineNumber] int sourceLineNumber = 0)
