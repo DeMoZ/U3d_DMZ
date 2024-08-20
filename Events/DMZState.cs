@@ -15,7 +15,7 @@ namespace DMZ.Events
             _previousData = state;
             _data = state;
         }
-        
+
         public void Subscribe(Action<T> callback)
         {
             lock (_lock)
@@ -33,7 +33,7 @@ namespace DMZ.Events
         }
 
         public T PreviousValue => _previousData;
-        
+
         public T Value
         {
             get => _data;
@@ -81,7 +81,7 @@ namespace DMZ.Events
 
             NotifySubscribers();
         }
-        
+
         /// <summary>
         /// set value to both data and previous data and force notify even if state has not changed
         /// </summary>
@@ -96,7 +96,7 @@ namespace DMZ.Events
 
             NotifySubscribers();
         }
-        
+
         protected virtual void NotifySubscribers()
         {
             List<Action<T>> subscribersCopy;
@@ -117,6 +117,79 @@ namespace DMZ.Events
             lock (_lock)
             {
                 _subscribers.Clear();
+            }
+        }
+    }
+
+    public class DMZState<T1, T2> : DMZState<T1>
+    {
+        private readonly List<Action<T1, T2>> _dualSubscribers = new();
+        protected T2 _data2;
+        protected T2 _previousData2;
+
+        public DMZState(T1 state1 = default, T2 state2 = default) : base(state1)
+        {
+            _previousData2 = state2;
+            _data2 = state2;
+        }
+
+        public void Subscribe(Action<T1, T2> callback)
+        {
+            lock (_lock)
+            {
+                _dualSubscribers.Add(callback);
+            }
+        }
+
+        public void Unsubscribe(Action<T1, T2> callback)
+        {
+            lock (_lock)
+            {
+                _dualSubscribers.Remove(callback);
+            }
+        }
+
+        public (T1, T2) PreviousValues => (PreviousValue, _previousData2);
+
+        public (T1, T2) Values
+        {
+            get => (Value, _data2);
+            set
+            {
+                lock (_lock)
+                {
+                    if (Equals(value.Item1, _data) && Equals(value.Item2, _data2))
+                        return;
+
+                    _previousData = _data;
+                    _data = value.Item1;
+                    _previousData2 = _data2;
+                    _data2 = value.Item2;
+                }
+
+                NotifySubscribers();
+            }
+        }
+
+        public void SetAndForceNotify(T1 value1, T2 value2)
+        {
+            lock (_lock)
+            {
+                _previousData = _data;
+                _data = value1;
+                _previousData2 = _data2;
+                _data2 = value2;
+            }
+
+            NotifySubscribers();
+        }
+
+        public void ResetValue(T1 value1, T2 value2)
+        {
+            lock (_lock)
+            {
+                _previousData = value1;
+
             }
         }
     }
