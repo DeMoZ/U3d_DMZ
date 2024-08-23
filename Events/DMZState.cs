@@ -189,7 +189,23 @@ namespace DMZ.Events
             lock (_lock)
             {
                 _previousData = value1;
+                _previousData2 = value2;
+            }
+        }
 
+        protected override void NotifySubscribers()
+        {
+            base.NotifySubscribers();
+            List<Action<T1, T2>> dualSubscribersCopy;
+
+            lock (_lock)
+            {
+                dualSubscribersCopy = new List<Action<T1, T2>>(_dualSubscribers);
+            }
+
+            foreach (var subscriber in dualSubscribersCopy)
+            {
+                subscriber?.Invoke(_data, _data2);
             }
         }
     }
